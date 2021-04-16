@@ -2,9 +2,11 @@
 
 void	prompt(void)
 {
+	*(global.buffer) = '\0';
 	write(2, "$> ", 3); 
 }
 
+/*
 void	ft_putstr_fd(char *s, int fd)
 {
 	int		i;
@@ -39,6 +41,17 @@ int		ft_isprint(int c)
 		return (1);
 	return (0);
 }
+
+int		ft_strlen(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+*/
 
 char	ctrl_key(char c)
 {
