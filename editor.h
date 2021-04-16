@@ -10,8 +10,7 @@
 # include <errno.h>
 # include "libft.h"
 
-# define INPUT_MAX 10
-# define CTRL_KEY(k) ((k) & 0x1f)
+# define INPUT_MAX 1024
 
 void				prompt(void);
 struct termios		enable_raw_mode(void);
