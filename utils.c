@@ -1,15 +1,20 @@
 #include "editor.h"
 
-void	ft_putstr(char *s)
+void	prompt(void)
+{
+	write(2, "$> ", 3); 
+}
+
+void	ft_putstr_fd(char *s, int fd)
 {
 	int		i;
 
 	i = 0;
 	while (s[i])
-		write(1, &s[i++], 1);
+		write(fd, &s[i++], 1);
 }
 
-void    ft_putnbr_fd(int x, int fd)
+void	ft_putnbr_fd(int x, int fd)
 {
 	long    n;
 	char    c;
@@ -28,7 +33,7 @@ void    ft_putnbr_fd(int x, int fd)
 	write(fd, &c, 1);
 }
 
-int ft_isprint(int c)
+int		ft_isprint(int c)
 {
 	if (c >= 32 && c < 127)
 		return (1);

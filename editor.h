@@ -7,6 +7,7 @@
 # include <term.h>
 # include <termios.h>
 # include <curses.h>
+# include <errno.h>
 
 # define INPUT_MAX 1024
 # define CTRL_KEY(k) ((k) & 0x1f)
@@ -15,7 +16,7 @@ void				prompt(void);
 struct termios		enable_raw_mode(void);
 void				disable_raw_mode(void);
 void				ft_putnbr_fd(int x, int fd);
-void				ft_putstr(char *s);
+void				ft_putstr_fd(char *s, int fd);
 int					ft_isprint(int c);
 char				ctrl_key(char c);
 
