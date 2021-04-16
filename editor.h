@@ -9,6 +9,7 @@
 # include <curses.h>
 
 # define INPUT_MAX 1024
+# define CTRL_KEY(k) ((k) & 0x1f)
 
 void				prompt(void);
 struct termios		enable_raw_mode(void);

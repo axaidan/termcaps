@@ -20,10 +20,8 @@ int main(void)
 		i = 0;
 		while (read(STDIN_FILENO, &c, 1) == 1 && stop == 0 && c != '\r')
 		{
-			//if (c == ctrl_key('q'))
-			if (c =='q')
+			if (c == ctrl_key('q'))
 			{
-				write(STDIN_FILENO, "RECEIVED CTRL KEY\r\n", 20);
 				stop = 1;
 				break ;
 			}
@@ -39,8 +37,11 @@ int main(void)
 		}
 		write(1, "\r\n", 2);
 		buffer[i] = '\0';
-		ft_putstr(buffer);
-		write(1, "\r\n", 2);
+		if (*buffer)
+		{
+			ft_putstr(buffer);
+			write(1, "\r\n", 2);
+		}
 	}
 	atexit(disable_raw_mode);
 	return (0);	

@@ -35,10 +35,7 @@ int ft_isprint(int c)
 	return (0);
 }
 
-/*
 char	ctrl_key(char c)
 {
-	printf("ctrl_key -- %c\r\n", c & 0x1f);
 	return ((c) & 0x1f);
 }
-*/
