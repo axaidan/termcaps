@@ -14,6 +14,8 @@ int		is_ctrl_keys(char c, int *stop, t_list *history)
 		clear_line();
 	else if (c == ctrl_value('h'))
 		print_history(history);
+	else if (c == ctrl_value('s'))
+		printf("history size = %d\r\n", ft_lstsize(history));
 	else
 		return (0);
 	return (1);

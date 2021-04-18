@@ -10,7 +10,7 @@ void	print_history(t_list *history)
 	i = 0;
 	while (history)
 	{
-		printf("%d\tcur: %p\t\"%10s\"\tnxt: %p\r\n", i++, history, history->content, history->next);
+		printf("%d\tcur: %p\t\"%10.10s\"\tnxt: %p\r\n", i++, history, history->content, history->next);
 		history = history->next;
 	}
 	prompt();

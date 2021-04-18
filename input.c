@@ -16,13 +16,25 @@ char    read_key(void)
     return (c);
 }
 
-char    process_key(int *stop, t_list *history)
+int    process_key(int *stop, t_list *history)
 {
     char    c;
+	char	seq[3];
 
     c = read_key();
 	if (is_ctrl_keys(c, stop, history))
 		;
+	else if (c == ESCAPE)
+	{
+		if (read(STDIN_FILENO, &seq[0], 1) != 1)
+			return (ESCAPE);
+		if (read(STDIN_FILENO, &seq[1], 1) != 1)
+			return (ESCAPE);
+		if (seq[0] == '[' && seq[1] == 'A')
+			return (UP_ARROW);
+		else if (seq[0] == '[' && seq[1] == 'B')
+			return (DN_ARROW);
+	}
 	else if (c == DELETE)
 		delete_char();
     else if (ft_isprint(c))
@@ -32,7 +44,7 @@ char    process_key(int *stop, t_list *history)
 
 void    write_buffer(int *stop, t_list *history)
 {
-    char    c;
+    int		c;
 
     glb.i = 0;
     c = '\0';
@@ -44,6 +56,8 @@ void    write_buffer(int *stop, t_list *history)
             glb.buffer[glb.i++] = c;
 			glb.buffer[glb.i] = '\0';
 		}
+		else if (c == UP_ARROW || c == DN_ARROW)
+			change_input_str(c);
     }
     write(STDIN_FILENO, "\r\n", 2);
 }
