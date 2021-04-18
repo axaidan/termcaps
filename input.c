@@ -21,15 +21,10 @@ char    process_key(int *stop)
     char    c;
 
     c = read_key();
-    if (c == ctrl_key('q'))
-        *stop = 1;
-	else if (c == ctrl_key('u'))
-	{
-		exec_termcap("dl");
-		prompt();
-	}
+	if (is_ctrl_keys(c, stop))
+		;
 	else if (c == 127)
-		delete();
+		delete_char();
     else if (ft_isprint(c))
         write(STDIN_FILENO, &c, 1);
     return (c);
@@ -37,29 +32,27 @@ char    process_key(int *stop)
 
 void    write_buffer(int *stop)
 {
-    int     i;
     char    c;
 
-    i = 0;
+    glb.i = 0;
     c = '\0';
-    while (c != '\r' && *stop == 0 && i < INPUT_MAX - 1)
+    while (c != '\r' && *stop == 0 && glb.i < INPUT_MAX - 1)
     {
         c = process_key(stop);
         if (ft_isprint(c))
 		{
-            global.buffer[i++] = c;
-			global.buffer[i] = '\0';
+            glb.buffer[glb.i++] = c;
+			glb.buffer[glb.i] = '\0';
 		}
     }
     write(STDIN_FILENO, "\r\n", 2);
-    global.buffer[i] = '\0';
 }
 
 void    print_buffer(void)
 {
-    if (*global.buffer)
+    if (*glb.buffer)
     {
-        ft_putstr_fd(global.buffer, STDIN_FILENO);
+        ft_putstr_fd(glb.buffer, STDIN_FILENO);
         write(STDIN_FILENO, "\r\n", 2);
     }
 }

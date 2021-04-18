@@ -44,15 +44,19 @@ int		init_termcaps(void)
 	return (1);
 }
 
-void	delete(void)
+void	delete_char(void)
 {
-	int		len;
-
-	len = (int)ft_strlen(global.buffer);
-	if (len > 1)
+	if (glb.i >= 1)
 	{
 		exec_termcap("le");
 		exec_termcap("dc");
-		global.buffer[len - 1] = '\0';
+		glb.buffer[--glb.i] = '\0';
 	}
+}
+
+void	clear_line(void)
+{
+	exec_termcap("dl");
+	prompt();
+	glb.i = 0;
 }

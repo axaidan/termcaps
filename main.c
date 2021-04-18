@@ -4,7 +4,7 @@ int		main(void)
 {
 	int		stop;
 
-	global.orig_termios = enable_raw_mode();
+	glb.orig_termios = enable_raw_mode();
 	if (init_termcaps() == 0)
 		return (-1);
 	exec_termcap("cl");
