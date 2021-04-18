@@ -57,6 +57,6 @@ void	delete_char(void)
 void	clear_line(void)
 {
 	exec_termcap("dl");
-	prompt();
 	glb.i = 0;
+	prompt();
 }

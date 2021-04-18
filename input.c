@@ -16,29 +16,29 @@ char    read_key(void)
     return (c);
 }
 
-char    process_key(int *stop)
+char    process_key(int *stop, t_list *history)
 {
     char    c;
 
     c = read_key();
-	if (is_ctrl_keys(c, stop))
+	if (is_ctrl_keys(c, stop, history))
 		;
-	else if (c == 127)
+	else if (c == DELETE)
 		delete_char();
     else if (ft_isprint(c))
         write(STDIN_FILENO, &c, 1);
     return (c);
 }
 
-void    write_buffer(int *stop)
+void    write_buffer(int *stop, t_list *history)
 {
     char    c;
 
     glb.i = 0;
     c = '\0';
-    while (c != '\r' && *stop == 0 && glb.i < INPUT_MAX - 1)
+    while (c != ENTER && *stop == 0 && glb.i < INPUT_MAX - 1)
     {
-        c = process_key(stop);
+        c = process_key(stop,history);
         if (ft_isprint(c))
 		{
             glb.buffer[glb.i++] = c;
