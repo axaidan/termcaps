@@ -38,7 +38,7 @@ void	change_input_str(int arrow)
 {
 	exec_termcap("dl");
 	write(STDERR_FILENO, "$> ", 3);
-	if (arrow == UP_ARROW)
+	if (arrow == UP_ARROW && glb.history)
 	{
 		if (glb.history_pos == NULL)
 		{
@@ -49,7 +49,7 @@ void	change_input_str(int arrow)
 			glb.history_pos = glb.history_pos->next;
 		ft_memcpy(glb.buffer, glb.history_pos->content, ft_strlen(glb.history_pos->content) + 1);
 	}
-	else if (arrow == DN_ARROW && glb.history != NULL)
+	else if (arrow == DN_ARROW && glb.history_pos != NULL)
 	{
 		if (glb.history_pos->previous != NULL)
 		{
