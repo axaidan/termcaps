@@ -36,13 +36,14 @@ void				clear_line(void);
 int					add_to_history(t_list **history);
 void				print_history(t_list *history);
 void				change_input_str(int arrow);
+int					arrow_value(void);
 
 typedef struct				s_global
 {
 	struct termios		orig_termios;
 	char				buffer[INPUT_MAX];
-	char				*buffer_bckp;
-//	t_list				*history;
+//	char				backup[INPUT_MAX];
+//	t_list				*history_pos;
 	int					i;
 }							t_global;
 

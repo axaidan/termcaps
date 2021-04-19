@@ -61,13 +61,4 @@ void	clear_line(void)
 	prompt();
 }
 
-void	change_input_str(int arrow)
-{
-	glb.buffer_bckp = glb.buffer;
-	exec_termcap("dl");
-	write(STDERR_FILENO, "$> ", 3);
-	if (arrow == UP_ARROW)
-		write(STDIN_FILENO, "going up in history", 19);
-	else if (arrow == DN_ARROW)
-		write(STDIN_FILENO, "going down in history", 21);
-}
+

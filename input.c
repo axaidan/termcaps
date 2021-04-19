@@ -19,22 +19,12 @@ char    read_key(void)
 int    process_key(int *stop, t_list *history)
 {
     char    c;
-	char	seq[3];
 
     c = read_key();
 	if (is_ctrl_keys(c, stop, history))
 		;
 	else if (c == ESCAPE)
-	{
-		if (read(STDIN_FILENO, &seq[0], 1) != 1)
-			return (ESCAPE);
-		if (read(STDIN_FILENO, &seq[1], 1) != 1)
-			return (ESCAPE);
-		if (seq[0] == '[' && seq[1] == 'A')
-			return (UP_ARROW);
-		else if (seq[0] == '[' && seq[1] == 'B')
-			return (DN_ARROW);
-	}
+		return (arrow_value());
 	else if (c == DELETE)
 		delete_char();
     else if (ft_isprint(c))

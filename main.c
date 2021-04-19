@@ -4,7 +4,6 @@ int		main(void)
 {
 	int		stop;
 	t_list	*start;
-	//t_list	*new_node;
 
 	start = NULL;
 	glb.orig_termios = enable_raw_mode();
