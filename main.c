@@ -3,9 +3,9 @@
 int		main(void)
 {
 	int		stop;
-	t_list	*start;
+	t_list	*history;
 
-	start = NULL;
+	history = NULL;
 	glb.orig_termios = enable_raw_mode();
 	if (init_termcaps() == 0)
 		return (-1);
@@ -14,14 +14,14 @@ int		main(void)
 	while (stop == 0)
 	{
 		prompt();
-		write_buffer(&stop, start);
+		write_buffer(&stop, history);
 		if (stop == 0)
 		{
-			stop = add_to_history(&start);
+			stop = add_to_history(&history);
 			print_buffer();
 		}
 	}
-	ft_lstclear(&start, free);
+	ft_lstclear(&history, free);
 	disable_raw_mode();
 	return (0);
 }
