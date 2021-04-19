@@ -31,9 +31,9 @@ int		add_to_history(t_list **history)
 		free(line);
 		return (1);
 	}
-	new_node->next = *history;
-	*history = new_node;
-	//ft_lstadd_front(history, new_node);
+	//new_node->next = *history;
+	//*history = new_node;
+	ft_lstadd_front(history, new_node);
 	//	printf("add_to_history() - ADDED, lst_size is now %d\r\n", ft_lstsize(*history));
 	//	printf("add_to_history() - ADDED, (*history)->content = \"%10s\"\t(*history)->next = %p\r\n", (*history)->content, (*history)->next);
 	return (0);
