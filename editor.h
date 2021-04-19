@@ -42,8 +42,9 @@ typedef struct				s_global
 {
 	struct termios		orig_termios;
 	char				buffer[INPUT_MAX];
-//	char				backup[INPUT_MAX];
-//	t_list				*history_pos;
+	char				backup[INPUT_MAX];
+	t_list				*history_pos;
+	t_list				*history;
 	int					i;
 }							t_global;
 

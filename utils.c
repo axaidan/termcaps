@@ -2,6 +2,7 @@
 
 void	prompt(void)
 {
+	glb.history_pos = NULL;
 	*(glb.buffer) = '\0';
 	write(STDERR_FILENO, "$> ", 3); 
 }
