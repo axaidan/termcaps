@@ -23,30 +23,30 @@ typedef struct termios t_termios;
 
 typedef struct				s_buff
 {
-	char				buffer[INPUT_MAX];
-	char				backup[INPUT_MAX];
-	t_list				*pos;
-	t_list				*history;
-	int					i;
+	char		buffer[INPUT_MAX];
+	char		backup[INPUT_MAX];
+	t_list		*pos;
+	int			i;
 }							t_buff;
 
 void				prompt(t_buff *buff);
-struct termios		enable_raw_mode(void);
+t_termios			enable_raw_mode(void);
 void				disable_raw_mode(t_termios orig_termios);
 char				ctrl_value(char c);
 char				read_key(void);
-int					process_key(int *stop, t_buff *buff);
-void				write_buffer(int *stop, t_buff *buff);
+int					process_key(t_buff *buff);
+void				write_buffer(int *stop, t_buff *buff, t_list *history);
 void				print_buffer(t_buff *buff);
 int					init_termcaps(void);
 int					put_termcap(int c);
 void				exec_termcap(char *termcap_name);
 void				delete_char(t_buff *buff);
-int					is_ctrl_keys(char c, int *stop, t_buff *buff);
+int					is_ctrl_keys(char c, int *stop, t_buff *buff, t_list *history);
 void				clear_line(t_buff *buff);
-int					add_to_history(t_buff *buff);
-void				display_history(t_buff *buff);
-void				change_input_str(int arrow, t_buff *buff);
+int					add_to_history(t_buff *buff, t_list **history);
+void				display_history(t_list *history);
+void				change_input_str(int arrow, t_buff *buff, t_list *history);
 int					arrow_value(void);
+int					init_buff_and_history(t_buff *buff, t_list **history);
 
 #endif

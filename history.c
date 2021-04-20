@@ -1,83 +1,82 @@
 #include "editor.h"
 
-void	display_history(t_buff *buff)
+void	display_history(t_list *hist)
 {
 	int		i;
-	t_list	*hist;
 
 	printf("\r\n");
 	i = 0;
-	hist = buff->history;
 	while (hist)
 	{
-		printf("%d\tcur: %p\t\"%10.10s\"\tprv: %p\tnxt: %p\r\n", i++, hist, hist->content, hist->previous, hist->next);
+		printf("%d\tcur: %p\t\"%10.10s\"\tprv: %p\tnxt: %p\r\n", i++, hist, 
+			hist->content, hist->previous, hist->next);
 		hist = hist->next;
 	}
-	prompt(buff);
 }
 
-//int		add_to_history(t_list **history)
-int		add_to_history(t_buff *buff)
+int		add_to_history(t_buff *buff, t_list **history)
 {
 	char	*line;
 	t_list	*new_node;
 
-	line = ft_strdup(buff->buffer);
-	if (line == NULL)
-		return (1);
-	new_node = ft_lstnew(line);
-	if (new_node == NULL)
+	if (buff->buffer[0] != '\0')
 	{
-		free(line);
-		return (1);
+		line = ft_strdup(buff->buffer);
+		if (line == NULL)
+			return (1);
+		new_node = ft_lstnew(line);
+		if (new_node == NULL)
+		{
+			free(line);
+			return (1);
+		}
+		ft_lstadd_front(history, new_node);
 	}
-	ft_lstadd_front(&(buff->history), new_node);
 	return (0);
 }
 
-void	change_input_str(int arrow, t_buff *buff)
+void	exec_up_arrow(t_buff *buff, t_list *history)
+{
+	size_t	len;
+
+	if (buff->pos == NULL)
+	{
+		len = ft_strlen(buff->buffer) + 1;
+		ft_memcpy(buff->backup, buff->buffer, len);
+		buff->pos = history;
+	}
+	else if (buff->pos->next != NULL)
+		buff->pos = buff->pos->next;
+	len = ft_strlen(buff->pos->content) + 1;
+	ft_memcpy(buff->buffer, buff->pos->content, len);
+}
+
+void	exec_down_arrow(t_buff *buff)
+{
+	size_t	len;
+
+	if (buff->pos->previous != NULL)
+	{
+		buff->pos = buff->pos->previous;
+		len = ft_strlen(buff->pos->content) + 1;
+		ft_memcpy(buff->buffer, buff->pos->content, len);
+	}
+	else if (buff->pos->previous == NULL)
+	{
+		len = ft_strlen(buff->backup) + 1;
+		ft_memcpy(buff->buffer, buff->backup, len);
+		buff->pos = NULL;
+	}
+}
+
+void	change_input_str(int arrow, t_buff *buff, t_list *history)
 {
 	exec_termcap("dl");
 	write(STDERR_FILENO, "$> ", 3);
-	if (arrow == UP_ARROW && buff->history)
-	{
-		if (buff->pos == NULL)
-		{
-			ft_memcpy(buff->backup, buff->buffer, ft_strlen(buff->buffer) + 1);
-			buff->pos = buff->history;
-		}
-		else if (buff->pos->next != NULL)
-			buff->pos = buff->pos->next;
-		ft_memcpy(buff->buffer, buff->pos->content, ft_strlen(buff->pos->content) + 1);
-	}
+	if (arrow == UP_ARROW && history)
+		exec_up_arrow(buff, history);
 	else if (arrow == DN_ARROW && buff->pos != NULL)
-	{
-		if (buff->pos->previous != NULL)
-		{
-			buff->pos = buff->pos->previous;
-			ft_memcpy(buff->buffer, buff->pos->content, ft_strlen(buff->pos->content) + 1);
-		}
-		else if (buff->pos->previous == NULL)
-		{
-			ft_memcpy(buff->buffer, buff->backup, ft_strlen(buff->backup) + 1);
-			buff->pos = NULL;
-		}
-	}
+		exec_down_arrow(buff);
 	ft_putstr_fd(buff->buffer, 1);
 	buff->i = ft_strlen(buff->buffer);
-}
-
-int		arrow_value(void)
-{
-	char	seq[3];
-
-	if (read(STDIN_FILENO, &seq[0], 1) != 1)
-		return (ESCAPE);
-	if (read(STDIN_FILENO, &seq[1], 1) != 1)
-		return (ESCAPE);
-	if (seq[0] == '[' && seq[1] == 'A')
-		return (UP_ARROW);
-	else if (seq[0] == '[' && seq[1] == 'B')
-		return (DN_ARROW);
-	return (ESCAPE);
 }
