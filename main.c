@@ -15,7 +15,7 @@ int		main(void)
 	while (stop == 0)
 	{
 		prompt(&buff);
-		write_buffer(&stop, &buff, history);
+		stop = write_buffer(&stop, &buff, history);
 		if (stop == 0)
 		{
 			stop = add_to_history(&buff, &history);

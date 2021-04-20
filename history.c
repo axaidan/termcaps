@@ -8,7 +8,7 @@ void	display_history(t_list *hist)
 	i = 0;
 	while (hist)
 	{
-		printf("%d\tcur: %p\t\"%10.10s\"\tprv: %p\tnxt: %p\r\n", i++, hist, 
+		printf("%d\tcur: %p\t\"%10.10s\"\tprv: %p\tnxt: %p\r\n", i++, hist,
 			hist->content, hist->previous, hist->next);
 		hist = hist->next;
 	}

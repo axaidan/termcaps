@@ -50,9 +50,36 @@ char	ctrl_value(char c)
 
 int    init_buff_and_history(t_buff *buff, t_list **history)
 {
+	buff->buffer = malloc(INPUT_MAX);
+	if (buff->buffer == NULL)
+		return (1);
 	ft_bzero(buff->buffer, INPUT_MAX);
+	buff->backup = malloc(INPUT_MAX);
+	if (buff->buffer == NULL)
+	{
+		free(buff->buffer);
+		return (1);
+	}
 	ft_bzero(buff->backup, INPUT_MAX);
 	buff->pos = NULL;
 	buff->i = 0;
+	buff->factor = 1;
 	*history = NULL;
+	return (0);
+}
+
+void	*ft_realloc(void *old_ptr, size_t old_size, size_t new_size)
+{
+	void	*new_ptr;
+
+	new_ptr = malloc(new_size);
+	if (new_ptr == NULL)
+	{
+		free(old_ptr);
+		return (NULL);
+	}
+	ft_bzero(new_ptr, new_size);	
+	ft_memcpy(new_ptr, old_ptr, old_size);
+	free(old_ptr);
+	return (new_ptr);
 }

@@ -30,15 +30,36 @@ int    process_key(t_buff *buff)
     return (c);
 }
 
-void    write_buffer(int *stop, t_buff *buff, t_list *history)
+int		expand_buffers(t_buff *buff)
+{
+	(buff->factor)++;
+	buff->buffer = ft_realloc(buff->buffer, INPUT_MAX * (buff->factor - 1),
+		INPUT_MAX * buff->factor);
+	buff->backup = ft_realloc(buff->backup, INPUT_MAX * (buff->factor - 1),
+		INPUT_MAX * buff->factor);
+	if (buff->backup == NULL || buff->buffer == NULL)
+	{
+		free(buff->buffer);
+		free(buff->backup);
+		return (1);
+	}
+	return (0);
+}
+
+int		write_buffer(int *stop, t_buff *buff, t_list *history)
 {
     int		c;
 
     buff->i = 0;
     c = '\0';
-    while (c != ENTER && *stop == 0 && buff->i < INPUT_MAX - 1)
+    while (c != ENTER && *stop == 0)
     {
         c = process_key(buff);
+		if (buff->i == (INPUT_MAX * buff->factor) - 1)
+		{
+			if (expand_buffers(buff))
+				return (1);
+		}
         if (ft_isprint(c))
 		{
             buff->buffer[buff->i++] = c;
@@ -50,6 +71,7 @@ void    write_buffer(int *stop, t_buff *buff, t_list *history)
 			;
     }
     write(STDIN_FILENO, "\r\n", 2);
+	return (*stop);
 }
 
 void    print_buffer(t_buff *buff)
