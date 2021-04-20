@@ -1,22 +1,5 @@
 #include "editor.h"
 
-int		put_termcap(int c)
-{
-	char	ch_c;
-
-	ch_c = (char)c;
-	write(STDIN_FILENO, &c, 1);
-	return (1);
-}
-
-void	exec_termcap(char *termcap_name)
-{
-	char	*termcap_value;
-
-	termcap_value = tgetstr(termcap_name, NULL);
-	tputs(termcap_value, 1, put_termcap);
-}
-
 int		init_termcaps(void)
 {
 	int		ret_tgetent;
@@ -44,6 +27,23 @@ int		init_termcaps(void)
 	return (1);
 }
 
+int		put_termcap(int c)
+{
+	char	ch_c;
+
+	ch_c = (char)c;
+	write(STDIN_FILENO, &c, 1);
+	return (1);
+}
+
+void	exec_termcap(char *termcap_name)
+{
+	char	*termcap_value;
+
+	termcap_value = tgetstr(termcap_name, NULL);
+	tputs(termcap_value, 1, put_termcap);
+}
+
 void	delete_char(void)
 {
 	if (glb.i >= 1)
@@ -60,5 +60,3 @@ void	clear_line(void)
 	glb.i = 0;
 	prompt();
 }
-
-
