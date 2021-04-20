@@ -23,6 +23,8 @@ int		main(void)
 		}
 	}
 	ft_lstclear(&history, free);
+	free(buff.buffer);
+	free(buff.backup);
 	disable_raw_mode(orig_termios);
 	return (0);
 }
