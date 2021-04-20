@@ -44,19 +44,19 @@ void	exec_termcap(char *termcap_name)
 	tputs(termcap_value, 1, put_termcap);
 }
 
-void	delete_char(void)
+void	delete_char(t_buff *buff)
 {
-	if (glb.i >= 1)
+	if (buff->i >= 1)
 	{
 		exec_termcap("le");
 		exec_termcap("dc");
-		glb.buffer[--glb.i] = '\0';
+		buff->buffer[--buff->i] = '\0';
 	}
 }
 
-void	clear_line(void)
+void	clear_line(t_buff *buff)
 {
 	exec_termcap("dl");
-	glb.i = 0;
-	prompt();
+	buff->i = 0;
+	prompt(buff);
 }

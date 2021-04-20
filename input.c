@@ -16,47 +16,47 @@ char    read_key(void)
     return (c);
 }
 
-int    process_key(int *stop, t_list *history)
+int    process_key(int *stop, t_buff *buff)
 {
     char    c;
 
     c = read_key();
-	if (is_ctrl_keys(c, stop, history))
+	if (is_ctrl_keys(c, stop, buff))
 		;
 	else if (c == ESCAPE)
 		return (arrow_value());
 	else if (c == DELETE)
-		delete_char();
+		delete_char(buff);
     else if (ft_isprint(c))
         write(STDIN_FILENO, &c, 1);
     return (c);
 }
 
-void    write_buffer(int *stop, t_list *history)
+void    write_buffer(int *stop, t_buff *buff)
 {
     int		c;
 
-    glb.i = 0;
+    buff->i = 0;
     c = '\0';
-    while (c != ENTER && *stop == 0 && glb.i < INPUT_MAX - 1)
+    while (c != ENTER && *stop == 0 && buff->i < INPUT_MAX - 1)
     {
-        c = process_key(stop,history);
+        c = process_key(stop, buff);
         if (ft_isprint(c))
 		{
-            glb.buffer[glb.i++] = c;
-			glb.buffer[glb.i] = '\0';
+            buff->buffer[buff->i++] = c;
+			buff->buffer[buff->i] = '\0';
 		}
 		else if (c == UP_ARROW || c == DN_ARROW)
-			change_input_str(c);
+			change_input_str(c, buff);
     }
     write(STDIN_FILENO, "\r\n", 2);
 }
 
-void    print_buffer(void)
+void    print_buffer(t_buff *buff)
 {
-    if (*glb.buffer)
+    if (*buff->buffer)
     {
-        ft_putstr_fd(glb.buffer, STDIN_FILENO);
+        ft_putstr_fd(buff->buffer, STDIN_FILENO);
         write(STDIN_FILENO, "\r\n", 2);
     }
 }

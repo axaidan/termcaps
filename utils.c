@@ -1,22 +1,22 @@
 #include "editor.h"
 
-void	prompt(void)
+void	prompt(t_buff *buff)
 {
-	glb.history_pos = NULL;
-	*(glb.buffer) = '\0';
+	buff->pos = NULL;
+	*(buff->buffer) = '\0';
 	write(STDERR_FILENO, "$> ", 3); 
 }
 
-int		is_ctrl_keys(char c, int *stop, t_list *history)
+int		is_ctrl_keys(char c, int *stop, t_buff *buff)
 {
     if (c == ctrl_value('d'))
         *stop = 1;
     else if (c == ctrl_value('u'))
-		clear_line();
+		clear_line(buff);
 	else if (c == ctrl_value('h'))
-		print_history(history);
+		display_history(buff);
 	else if (c == ctrl_value('s'))
-		printf("history size = %d\r\n", ft_lstsize(history));
+		printf("history size = %d\r\n", ft_lstsize(buff->history));
 	else
 		return (0);
 	return (1);

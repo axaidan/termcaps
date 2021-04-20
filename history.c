@@ -1,27 +1,28 @@
 #include "editor.h"
 
-void	print_history(t_list *history)
+void	display_history(t_buff *buff)
 {
-	//	t_list	*tmp;
 	int		i;
+	t_list	*hist;
 
 	printf("\r\n");
-	//	tmp = history;
 	i = 0;
-	while (history)
+	hist = buff->history;
+	while (hist)
 	{
-		printf("%d\tcur: %p\t\"%10.10s\"\tnxt: %p\tprv: %p\r\n", i++, history, history->content, history->next, history->previous);
-		history = history->next;
+		printf("%d\tcur: %p\t\"%10.10s\"\tprv: %p\tnxt: %p\r\n", i++, hist, hist->content, hist->previous, hist->next);
+		hist = hist->next;
 	}
-	prompt();
+	prompt(buff);
 }
 
-int		add_to_history(t_list **history)
+//int		add_to_history(t_list **history)
+int		add_to_history(t_buff *buff)
 {
 	char	*line;
 	t_list	*new_node;
 
-	line = ft_strdup(glb.buffer);
+	line = ft_strdup(buff->buffer);
 	if (line == NULL)
 		return (1);
 	new_node = ft_lstnew(line);
@@ -30,40 +31,40 @@ int		add_to_history(t_list **history)
 		free(line);
 		return (1);
 	}
-	ft_lstadd_front(history, new_node);
+	ft_lstadd_front(&(buff->history), new_node);
 	return (0);
 }
 
-void	change_input_str(int arrow)
+void	change_input_str(int arrow, t_buff *buff)
 {
 	exec_termcap("dl");
 	write(STDERR_FILENO, "$> ", 3);
-	if (arrow == UP_ARROW && glb.history)
+	if (arrow == UP_ARROW && buff->history)
 	{
-		if (glb.history_pos == NULL)
+		if (buff->pos == NULL)
 		{
-			ft_memcpy(glb.backup, glb.buffer, ft_strlen(glb.buffer) + 1);
-			glb.history_pos = glb.history;
+			ft_memcpy(buff->backup, buff->buffer, ft_strlen(buff->buffer) + 1);
+			buff->pos = buff->history;
 		}
-		else if (glb.history_pos->next != NULL)
-			glb.history_pos = glb.history_pos->next;
-		ft_memcpy(glb.buffer, glb.history_pos->content, ft_strlen(glb.history_pos->content) + 1);
+		else if (buff->pos->next != NULL)
+			buff->pos = buff->pos->next;
+		ft_memcpy(buff->buffer, buff->pos->content, ft_strlen(buff->pos->content) + 1);
 	}
-	else if (arrow == DN_ARROW && glb.history_pos != NULL)
+	else if (arrow == DN_ARROW && buff->pos != NULL)
 	{
-		if (glb.history_pos->previous != NULL)
+		if (buff->pos->previous != NULL)
 		{
-			glb.history_pos = glb.history_pos->previous;
-			ft_memcpy(glb.buffer, glb.history_pos->content, ft_strlen(glb.history_pos->content) + 1);
+			buff->pos = buff->pos->previous;
+			ft_memcpy(buff->buffer, buff->pos->content, ft_strlen(buff->pos->content) + 1);
 		}
-		else if (glb.history_pos->previous == NULL)
+		else if (buff->pos->previous == NULL)
 		{
-			ft_memcpy(glb.buffer, glb.backup, ft_strlen(glb.backup) + 1);
-			glb.history_pos = NULL;
+			ft_memcpy(buff->buffer, buff->backup, ft_strlen(buff->backup) + 1);
+			buff->pos = NULL;
 		}
 	}
-	ft_putstr_fd(glb.buffer, 1);
-	glb.i = ft_strlen(glb.buffer);
+	ft_putstr_fd(buff->buffer, 1);
+	buff->i = ft_strlen(buff->buffer);
 }
 
 int		arrow_value(void)
