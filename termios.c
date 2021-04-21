@@ -1,6 +1,6 @@
 #include "editor.h"
 
-void			disable_raw_mode(t_termios orig_termios) 
+void			disable_raw_mode(t_termios orig_termios)
 {
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
 }
